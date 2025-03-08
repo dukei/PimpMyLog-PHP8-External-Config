@@ -4,28 +4,36 @@ Desktop.ini
 ._*
 Thumbs.db
 *.swp
+
+# Files that might appear on external disks
 .Spotlight-V100
 .Trashes
-.cli_fake_session
-_cli_fake_session
-.idea
 
-/todo.*.todo
-/.sass-cache
-/*.user.php
-/*.user.css
-/*.user.json
-/*.user.json.tmp
+# Branch master old
+/config.inc.php
+/config.inc.php.tmp
+
+# Branch master
 /inc/test.REMOVE_UPPERCASE.php
-/inc/test.PLEASE_REMOVE_ME.*
+*.user.php
+*.user.css
+*.user.json
+*.user.json.tmp
 /config.user.d/*
-/_build
-/_build
+
+# Branch jekyll
 /_site
+/_build
 /_tmp
 /dist
+
+# Compiled Python files
+*.pyc
 
 # Application specific files
 /node_modules
 /bower_components
+/Gemfile.lock
+/*.iml
+/.idea
 /vendor

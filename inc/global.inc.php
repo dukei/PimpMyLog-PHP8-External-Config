@@ -138,39 +138,6 @@ define( 'SUHOSIN_URL' , "http://support.pimpmylog.com/kb/configuration/php-insta
 define( 'SAFE_MODE' , file_exists( PML_CONFIG_BASE . DIRECTORY_SEPARATOR . 'SAFE_MODE' ) );
 define( 'TIME_ZONE_SUPPORT_URL' , 'http://support.pimpmylog.com/discussions/problems/46-timezone-uncaught-exception' );
 
-
-/*
-|--------------------------------------------------------------------------
-| Disable magic quotes
-|--------------------------------------------------------------------------
-|
-| PHP 5.2 and 5.3 can have magic quotes enabled on the whole PHP install.
-| http://support.pimpmylog.com/discussions/problems/56-regex-tester-match-is-not-a-valid-associative-array
-|
-*/
-if ( get_magic_quotes_gpc() )
-{
-	$process = array( &$_GET , &$_POST , &$_COOKIE , &$_REQUEST );
-	while ( list( $key , $val ) = each( $process ) )
-	{
-		foreach ( $val as $k => $v )
-		{
-			unset( $process[ $key ][ $k ] );
-			if ( is_array( $v ) )
-			{
-				$process[ $key ][ stripslashes( $k ) ] = $v;
-				$process[]                             = &$process[ $key ][ stripslashes( $k ) ];
-			}
-			else
-			{
-				$process[ $key ][ stripslashes( $k ) ] = stripslashes( $v );
-			}
-		}
-	}
-	unset( $process );
-}
-
-
 /*
 |--------------------------------------------------------------------------
 | Global internal parameters
