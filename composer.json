@@ -1,7 +1,7 @@
 {
     "name"        : "potsky/pimp-my-log",
     "description" : "Log viewer for your web server",
-    "version"     : "1.7.14",
+    "version"     : "1.7.15",
     "license"     : "GPL-3.0+",
     "type"        : "project",
     "homepage"    : "http://pimpmylog.com",
@@ -9,6 +9,11 @@
         "email"  : "support@pimpmylog.com",
         "issues" : "http://support.pimpmylog.com/discussion/new",
         "source" : "https://github.com/potsky/PimpMyLog"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.7.x-dev"
+        }
     },
     "authors" : [
         {
@@ -23,13 +28,17 @@
             "role"     : "Translator (pt_BR)"
         },
         {
+            "name"     : "Dukei",
+            "homepage" : "https://github.com/dukei",
+            "role"     : "PHP8 adaptation and external configuration for use with composer"
+        },
+        {
             "name"     : "Martin",
             "homepage" : "https://github.com/mmattel",
             "role"     : "Configuration examples contributor"
         }
     ],
     "require" : {
-        "php" : ">=5.2.0",
-        "composer/installers": "*"
+        "php" : ">=5.2.0"
     }
 }
