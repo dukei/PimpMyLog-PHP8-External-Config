@@ -536,6 +536,12 @@ function config_load( $load_user_configuration_dir = true )
 		$count  = max( 1 , @(int)$file[ 'count' ] );
 		$gpaths = glob( $path , GLOB_MARK | GLOB_NOCHECK );
 
+        //If there is a reference to another file, let's get other values from there
+        if(isset($file['ref'])){
+            $fileref = (array)@$files_tmp[$file['ref']];
+            $file += $fileref;
+        }
+
 		if ( count( $gpaths ) == 0 )
 		{
 		}
