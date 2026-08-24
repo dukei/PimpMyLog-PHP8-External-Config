@@ -1,7 +1,7 @@
 /*PSK*/pml_version_cb(/*PSK*/
 {
-	"version"     : "1.7.14",
-	"versiondevh" : "025d83c29c6cf8dbb697aa966c9e9f8713ec92f1",
+	"version"     : "1.7.16",
+	"versiondevh" : "ec9d0409fee16e22baea3f5e076bd8ca7d2f081c",
 	"messages"    : {
         "20161214" : "<p>Hi folks!</p><p>Life has been really complicated this last year but I hope things will be fun again and I hope I will have time to update Pimp My Log.</p>",
         "20141121" : "Thank you to people who have starred the project on GitHub !",
@@ -9,6 +9,14 @@
 		"20141011" : "This message will never be shown. Never Gonna Give You Up !"
 	},
 	"changelog"   : {
+        "1.7.16" : {
+            "released" : "2026-08-24",
+            "fixed" : [
+                "PHP 8.3",
+                "Several regexps per file",
+                "html formatter type"
+            ]
+        },
         "1.7.14" : {
             "released" : "2017-04-27",
             "fixed" : [

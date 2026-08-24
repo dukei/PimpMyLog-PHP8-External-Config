@@ -1,10 +1,10 @@
 <?php
-/*! pimpmylog - 1.7.14 - 025d83c29c6cf8dbb697aa966c9e9f8713ec92f1*/
+/*! pimpmylog - 1.7.16 - ec9d0409fee16e22baea3f5e076bd8ca7d2f081c*/
 /*
  * pimpmylog
  * http://pimpmylog.com
  *
- * Copyright (c) 2017 Potsky, contributors
+ * Copyright (c) 2026 Potsky, contributors
  * Licensed under the GPLv3 license.
  */
 ?><?php
