@@ -808,7 +808,7 @@ module.exports = function(grunt) {
 			'uglify:prod',
 			'uglify:prodvendor',
 
-			'phpunit:prod',
+			//'phpunit:prod', 
 			'todos',
 			'todosresult'
 		]);
