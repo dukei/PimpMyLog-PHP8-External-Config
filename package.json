@@ -29,7 +29,8 @@
     "jquery-zclip": "patricklodder/jquery-zclip",
     "bootstrap-sass-official": "twbs/bootstrap-sass#v3.4.1",
     "bootstrap-table": "wenzhixin/bootstrap-table#1.11.1",
-    "smartmenus": "vadikom/smartmenus#1.0.1"
+    "smartmenus": "vadikom/smartmenus#1.0.1",
+    "sprintf-js": "alexei/sprintf.js#1.0.3"
   },
   "napa-config": {
     "log-level": "verbose"
