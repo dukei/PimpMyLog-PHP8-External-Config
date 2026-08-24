@@ -478,6 +478,9 @@ var get_logs     = function( load_default_values , load_full_file , load_from_ge
 				else if ( 'link' === type.parser ) {
 					val = '<a href="' + val + '" target="linkout">' + val_cut( val , type.cut ) + '</a>';
 				}
+				else if ( 'html' === type.parser ) {
+					val = val_cut(type.param.replace(/%VALUE%/g, val), type.cut);
+				}
 				else if ( 'ua' === type.parser ) {
 					var ua  = uaparser.setUA( val ).getResult();
 					var uas = type.param.match(/\{[a-zA-Z.]*\}/g);
