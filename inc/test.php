@@ -18,7 +18,7 @@ $access_file = str_replace(':', '', 'test.PLEASE_REMOVE_ME.access_from_' . get_c
  * Regex Tester
  *
  * @param   string   $type       type
- * @param   string   $regex      regex
+ * @param   string|array   $regexes      regex
  * @param   array    $match      matchers
  * @param   array    $types      typers
  * @param   array    $logs       logs
@@ -27,22 +27,23 @@ $access_file = str_replace(':', '', 'test.PLEASE_REMOVE_ME.access_from_' . get_c
  *
  * @return  string               html
  */
-function test( $type , $regex , $match , $types , $logs , $headers = true , $multiline = '' ) {
+function test( $type , $regexes , $match , $types , $logs , $headers = true , $multiline = '' ) {
 	$r  = '<h4>' . $type . '</h4>';
 	$r .= '<pre>';
-	$r .= ( $headers === true ) ? '<strong>Regex</strong>: ' . $regex . "\n" : '';
+	$r .= ( $headers === true ) ? '<strong>Regex</strong>: ' . $regexes . "\n" : '';
 	$r .= ( $headers === true ) ? '<strong>Log  </strong>: ' . $logs . "\n" : '';
 	$r .= ( $headers === true ) ? "\n" : '';
 
 	$logs   = array_reverse( explode( "\n" , $logs ) );
 	$rank   = 0;
-	$size   = count( strval( count($logs) ) ) + 2;
+	$size   = strlen( strval( count($logs) ) ) + 2;
 	$blan   = str_pad( '' , $size );
 	$buffer = array();
 
 	foreach( $logs as $log ) {
 
-		$tokens = LogParser::parseLine( $regex , $match , $log , $types );
+
+		$tokens = LogParser::parseLine( $regexes , $match , implode("\n", array_merge([$log], array_reverse($buffer))) , $types );
 
 		if ( is_array( $tokens ) ) {
 			$rank++;
@@ -51,18 +52,18 @@ function test( $type , $regex , $match , $types , $logs , $headers = true , $mul
 			$maxlength = 0;
 			foreach ( $tokens as $token => $value ) $maxlength = max( $maxlength , strlen( $token ) );
 
-			$r .= ( $headers ) ? '' : '<strong>' . $disp . $log . "</strong>\n";
+			$r .= ( $headers ) ? '' : '<strong>' . $disp . htmlspecialchars($log) . "</strong>\n";
 
 			foreach ( $tokens as $token => $value ) {
 				if ( substr( $token , 0 , 3 ) === 'pml' ) continue;
 
-				$r .= $blan . '<strong>' . str_pad( $token , $maxlength ) . '</strong>: ' . $value;
+				$r .= $blan . '<strong>' . str_pad( $token , $maxlength ) . '</strong>: ' . htmlspecialchars($value);
 
 				if ( $token === $multiline ) {
 					if ( count( $buffer ) > 0 ) {
 						$buffer = array_reverse( $buffer );
 						foreach ( $buffer as $append ) {
-							$r .= "\n" . $blan . str_pad( '' , $maxlength ) . '  ' . $append;
+							$r .= "\n" . $blan . str_pad( '' , $maxlength ) . '  ' . htmlspecialchars($append);
 						}
 					}
 				}
@@ -117,15 +118,18 @@ if ( @$_POST['action'] === 'regextest' )
 		die();
 	}
 
-	if ( @preg_match( $regex , 'this is just a test !' ) === false ) {
-		$return['err'] = 'inputRegEx';
-		$return['msg'] = '<div class="alert alert-danger"><strong>' . __('Error') . '</strong> '. __('RegEx is not a valid PHP PCRE regular expression') . '</div>';
-		echo json_encode( $return );
-		die();
-	}
+    $regexes = explode("\n", $regex);
+    foreach($regexes as $i => $regex) {
+        if (@preg_match($regex, 'this is just a test !') === false) {
+            $return['err'] = 'inputRegEx';
+            $return['msg'] = '<div class="alert alert-danger"><strong>' . __('Error') . "</strong> [$i]" . __('RegEx is not a valid PHP PCRE regular expression') . '</div>';
+            echo json_encode($return);
+            die();
+        }
+    }
 
 	header('Content-type: application/json');
-	$return['msg'] = test( '' , $regex , $match, $types, $log , false , $multiline );
+	$return['msg'] = test( '' , $regexes , $match, $types, $log , false , $multiline );
 
 	echo json_encode( $return );
 	die();

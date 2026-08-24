@@ -5,7 +5,7 @@ class LogParser
 	/**
 	 * Read a log file and return an array of logs with metadata
 	 *
-	 * @param   string  $regex         A regex to match each line
+	 * @param   string|array  $regex         A regex to match each line
 	 * @param   array   $match         An array of matchers
 	 * @param   array   $types         An array of matchers types
 	 * @param   string  $tz            The wanted timezone to translate matchers with a date type
@@ -155,7 +155,7 @@ class LogParser
 					}
 
 					// Parse the new line
-					$log = self::parseLine( $regex , $match , $deal , $types , $tz );
+                    $log = self::parseLine( $regex , $match , implode("\n", array_merge([$deal], array_reverse($buffer))) , $types , $tz );
 
 					// The line has been successfully parsed by the parser (user regex ok)
 					if ( is_array( $log ) )
@@ -379,26 +379,64 @@ class LogParser
 	}
 
 
-	/**
-	 * A line of log parser
-	 *
-	 * @param string $regex The regex which describes the user log format
-	 * @param array  $match An array which links internal tokens to regex matches
-	 * @param string $log   The text log
-	 * @param string $types A array of types for fields
-	 * @param string $tz    A time zone identifier
-	 *
-	 * @return  mixed             An array where keys are internal tokens and values the corresponding values extracted
-	 *                            from the log file. Or false if line is not matchable.
-	 */
-	public static function parseLine( $regex , $match , $log , $types , $tz = null )
+    private static function outToString(array $out, array|string|int $key): string
+    {
+        if(!is_array($key))
+            $key = array($key);
+
+        $str = '';
+        foreach ( $key as $v )
+        {
+            $ref = $v;
+            // Key may be text reference to group, i.e. $group
+            if(is_string($v)){
+                if(strlen($v) >= 2 && $v[0] === '?'){
+                    $ref = substr($v, 1);
+                    if($ref[0] !== '?') {
+                        $str .= @$out[$ref][0];
+                        continue;
+                    }
+                }
+                $str .= $ref;
+            }else {
+                $str .= @$out[$ref][0];
+            }
+        }
+
+        return $str;
+    }
+
+    /**
+     * A line of log parser
+     *
+     * @param string|array{string} $regexes The regex which describes the user log format
+     * @param array $match An array which links internal tokens to regex matches
+     * @param string $log The text log
+     * @param array $types A array of types for fields
+     * @param null $tz A time zone identifier
+     *
+     * @return  array|false      An array where keys are internal tokens and values the corresponding values extracted
+     *                            from the log file. Or false if line is not matchable.
+     * @throws DateInvalidTimeZoneException
+     * @throws DateMalformedStringException
+     */
+	public static function parseLine(array|string $regexes, array $match , string $log , array $types , string $tz = null ): array|false
 	{
 		// If line is non matchable, return
-		preg_match_all( $regex , $log , $out , PREG_PATTERN_ORDER );
-		if ( @count( $out[ 0 ] ) === 0 )
-		{
-			return false;
-		}
+        if(!is_array($regexes))
+            $regexes = array($regexes);
+
+        $out = null;
+        foreach($regexes as $regex) {
+            preg_match_all($regex, $log, $out, PREG_PATTERN_ORDER);
+            if (@count($out[0]) === 0) {
+                continue;
+            }
+            break;
+        }
+        if (@count($out[0]) === 0) {
+            return false;
+        }
 
 		$result    = array();
 		$timestamp = 0;
@@ -443,19 +481,11 @@ class LogParser
 				}
 
 				// Date is an array description without keys ( 2 , ':' , 3 , '-' , ... )
-				else if ( is_array( $key ) )
-				{
-					$str = '';
-					foreach ( $key as $v )
-					{
-						$str .= ( is_string( $v ) ) ? $v : @$out[ $v ][ 0 ];
-					}
-				}
-
 				else
 				{
-					$str = @$out[ $key ][ 0 ];
+                    $str = self::outToString($out, $key);
 				}
+
 
 				// remove part next to the last /
 				$dateformat = ( substr( $type , 0 , 5 ) === 'date:' ) ? substr( $type , 5 ) : 'Y/m/d H:i:s';
@@ -496,18 +526,9 @@ class LogParser
 				$result[ $token ] = $formatted_date;
 			}
 			// Array description without keys ( 2 , ':' , 3 , '-' , ... )
-			else if ( is_array( $key ) )
-			{
-				$r = '';
-				foreach ( $key as $v )
-				{
-					$r .= ( is_string( $v ) ) ? $v : @$out[ $v ][ 0 ];
-				}
-				$result[ $token ] = $r;
-			}
 			else
 			{
-				$result[ $token ] = @$out[ $key ][ 0 ];
+				$result[ $token ] = self::outToString($out, $key);
 			}
 		}
 
