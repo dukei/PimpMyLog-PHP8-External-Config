@@ -1,7 +1,7 @@
 {
     "name"        : "potsky/pimp-my-log",
     "description" : "Log viewer for your web server",
-    "version"     : "1.7.14",
+    "version"     : "1.7.16",
     "license"     : "GPL-3.0+",
     "type"        : "project",
     "homepage"    : "http://pimpmylog.com",
@@ -29,7 +29,7 @@
         }
     ],
     "require" : {
-        "php" : ">=5.2.0",
+        "php" : ">=8.3.0",
         "composer/installers": "*"
     }
 }

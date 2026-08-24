@@ -9,6 +9,14 @@
 		"20141011" : "This message will never be shown. Never Gonna Give You Up !"
 	},
 	"changelog"   : {
+        "1.7.16" : {
+            "released" : "2026-08-24",
+            "fixed" : [
+                "PHP 8.3",
+                "Several regexps per file",
+                "html formatter type"
+            ]
+        },
         "1.7.14" : {
             "released" : "2017-04-27",
             "fixed" : [
