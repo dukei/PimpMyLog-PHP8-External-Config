@@ -39,7 +39,6 @@
         }
     ],
     "require" : {
-        "php" : ">=8.3.0",
-        "composer/installers": "*"
+        "php" : ">=8.3.0"
     }
 }
