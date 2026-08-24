@@ -15,12 +15,26 @@
   "private": true,
   "scripts": {
     "grunt": "grunt",
-    "setup-bootstrap": "shx mkdir -p bower_components && shx cp -r node_modules/bootstrap-sass/ bower_components/bootstrap-sass-official",
-    "build": "npm run grunt build install-production"
-
+    "build": "npm run grunt build install-production",
+    "install_bower_components": "napa && node copy-deps.js"
+  },
+  "napa": {
+    "jquery": "jquery/jquery-dist#2.2.4",
+    "respondJs": "scottjehl/Respond#1.4.2",
+    "modernizr": "Modernizr/Modernizr#v2.8.3",
+    "numeral": "adamwdraper/Numeral-js#1.5.6",
+    "hook": "jordansinger/Hook.js#master",
+    "ua-parser-js": "faisalman/ua-parser-js#0.7.39",
+    "jquery.cookie": "carhartl/jquery-cookie#v1.4.1",
+    "jquery-zclip": "patricklodder/jquery-zclip",
+    "bootstrap-sass-official": "twbs/bootstrap-sass#v3.4.1",
+    "bootstrap-table": "wenzhixin/bootstrap-table#1.11.1",
+    "smartmenus": "vadikom/smartmenus#1.0.1"
+  },
+  "napa-config": {
+    "log-level": "verbose"
   },
   "devDependencies": {
-    "bootstrap-sass": "^3.4.3",
     "grunt": "~0.4.5",
     "grunt-cli": "^1.5.0",
     "grunt-contrib-clean": "~0.5.0",
@@ -38,6 +52,7 @@
     "grunt-shell": "~0.6.1",
     "grunt-todos": "~0.3.0",
     "matchdep": "~0.3.0",
+    "napa": "^3.0.0",
     "preprocess": "~2.0.0",
     "shelljs": "~0.2.6",
     "shx": "^0.4.0",
